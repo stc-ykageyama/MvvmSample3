@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MvvmSample3.Views.MainPage"
+             Title="MVVMサンプル(Prism+ReactiveProperty)">
+
+    <StackLayout>
+        <Label Text="MVVMサンプル(Prism+ReactiveProperty)" 
+               FontSize="Large"
+               TextColor="White"
+               BackgroundColor="DarkBlue"
+               HorizontalTextAlignment="Center" />
+        <Label Text="{Binding Number.Value}" 
+               TextColor="Red" 
+               FontSize="Medium" 
+               HorizontalTextAlignment="Center" />
+        <Button Text="-1"
+                Command="{Binding DecrementCommand}" />
+        <Button Text="+1"
+                Command="{Binding IncrementCommand}" />
+    </StackLayout>
+
+</ContentPage>
