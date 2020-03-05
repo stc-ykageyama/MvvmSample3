@@ -12,6 +12,9 @@ namespace MvvmSample3.ViewModels
     /// </summary>
     public class MainPageViewModel : ViewModelBase, IDisposable
     {
+        // ReactivePropetyオブジェクト、ReactiveCommandオブジェクトをまとめてDisposeするためのもの
+        private CompositeDisposable Disposable { get; } = new CompositeDisposable();
+
         // プロパティ
         public ReactiveProperty<int> Number { get; } = new ReactiveProperty<int>();
 
@@ -24,10 +27,6 @@ namespace MvvmSample3.ViewModels
         // モデル
         private Counter model = new Counter();
 
-        // オブジェクトをまとめてDisposeするためのモノ
-        // ★ReactivePropertyとModelのプロパティを同期するときのおまじない
-        private CompositeDisposable disposable = new CompositeDisposable();
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -35,22 +34,24 @@ namespace MvvmSample3.ViewModels
         public MainPageViewModel(INavigationService navigationService)
             : base(navigationService)
         {
-            // NumberはModel(Counter)のNumberプロパティと同期する
-            // ★AddTo(disposable)はReactivePropertyとModelの同期をするときのおまじない
-            Number = model.ObserveProperty(x => x.Number).ToReactiveProperty().AddTo(disposable);
+            // Numberプロパティの設定
+            Number = model.ObserveProperty(x => x.Number)       // Model(Counter)のNameプロパティの変更を監視する
+                .ToReactiveProperty()                           // 監視対象のプロパティが変更されたらPropertyChangedイベントを発行する(ReactiveProperty化)
+                .AddTo(Disposable);                             // Dispose対象に追加する ※忘れないように!!
             // デクリメントコマンド実行時の処理
-            DecrementCommand.Subscribe(() => model.Decrement());
+            DecrementCommand.Subscribe(() => model.Decrement()) // DecrementCommandの実行時処理を設定する
+                .AddTo(Disposable);                             // Dispose対象に追加する ※忘れないように!!
             // インクリメントコマンド実行時の処理
-            IncrementCommand.Subscribe(() => model.Increment());
+            IncrementCommand.Subscribe(() => model.Increment()) // IncrementCommandの実行時処理を設定する
+                .AddTo(Disposable);                             // Dispose対象に追加する ※忘れないように!!
         }
 
         /// <summary>
-        /// CompositeDisposableにためたオブジェクトをまとめてDisposeする
-        /// ★ReactivePropertyとModelのプロパティを同期するときのおまじない
+        /// CompositeDisposableに追加したオブジェクトをまとめてDisposeする
         /// </summary>
         public void Dispose()
         {
-            disposable.Dispose();
+            Disposable.Dispose();
         }
     }
 }
