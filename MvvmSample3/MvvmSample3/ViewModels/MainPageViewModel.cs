@@ -16,7 +16,7 @@ namespace MvvmSample3.ViewModels
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
 
         // プロパティ
-        public ReactiveProperty<int> Number { get; } = new ReactiveProperty<int>();
+        public ReactiveProperty<int> Number { get; }
 
         // デクリメントコマンド
         public ReactiveCommand DecrementCommand { get; } = new ReactiveCommand();
