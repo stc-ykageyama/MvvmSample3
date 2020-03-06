@@ -39,11 +39,9 @@ namespace MvvmSample3.ViewModels
                 .ToReactiveProperty()                           // 監視対象のプロパティが変更されたらPropertyChangedイベントを発行する(ReactiveProperty化)
                 .AddTo(Disposable);                             // Dispose対象に追加する ※忘れないように!!
             // デクリメントコマンド実行時の処理
-            DecrementCommand.Subscribe(() => model.Decrement()) // DecrementCommandの実行時処理を設定する
-                .AddTo(Disposable);                             // Dispose対象に追加する ※忘れないように!!
+            DecrementCommand.Subscribe(() => model.Decrement());
             // インクリメントコマンド実行時の処理
-            IncrementCommand.Subscribe(() => model.Increment()) // IncrementCommandの実行時処理を設定する
-                .AddTo(Disposable);                             // Dispose対象に追加する ※忘れないように!!
+            IncrementCommand.Subscribe(() => model.Increment());
         }
 
         /// <summary>
